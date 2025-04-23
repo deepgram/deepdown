@@ -10,7 +10,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build && node scripts/copy-readme.js",
+    "prebuild": "mkdir -p packages/deepdown",
     "clean": "lerna run clean",
     "test": "lerna run test",
     "lint": "lerna run lint",
