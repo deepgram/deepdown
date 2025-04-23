@@ -10,7 +10,3 @@ export * from '@deepgram/deepdown';
 
 // Export the CLI functionality
 import './cli'; // The CLI file doesn't export anything, it just runs the command
-
-// Re-export the default export from the main package
-import deepdown from '@deepgram/deepdown';
-export default deepdown; 
