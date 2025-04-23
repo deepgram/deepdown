@@ -4,3 +4,5 @@ dist
 .env.*
 *.env
 *.env.*
+tsconfig.tsbuildinfo
+*.tsbuildinfo

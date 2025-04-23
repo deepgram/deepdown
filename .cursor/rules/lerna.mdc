@@ -1,0 +1,80 @@
+---
+description: Rules when editing package dependencies, or doing any build / lerna / npm / pnpm commands
+globs: 
+alwaysApply: false
+---
+
+### ✅ `.cursor/rules/lerna.mdc`
+
+```md
+# @title Lerna 8 + pnpm Commands
+# @when packageJson.devDependencies.lerna
+
+## Run the "build" script in all packages
+```sh
+lerna run build
+```
+
+## Run the "test" script in all packages
+```sh
+lerna run test
+```
+
+## Run a script in all packages
+# @prompt script name
+```sh
+lerna run {1}
+```
+
+## Version packages based on conventional commits
+```sh
+lerna version --conventional-commits
+```
+
+## Publish updated packages to npm
+```sh
+lerna publish from-package
+```
+
+---
+
+## Per-package commands (pnpm)
+
+## Add a dependency to a package
+# @prompt package name
+# @prompt dependency name
+```sh
+pnpm --filter {1} add {2}
+```
+
+## Add a dev dependency to a package
+# @prompt package name
+# @prompt dependency name
+```sh
+pnpm --filter {1} add -D {2}
+```
+
+## Remove a dependency from a package
+# @prompt package name
+# @prompt dependency name
+```sh
+pnpm --filter {1} remove {2}
+```
+
+## Run a script in a specific package
+# @prompt package name
+# @prompt script name
+```sh
+pnpm --filter {1} run {2}
+```
+
+## Install and link all workspace dependencies
+```sh
+pnpm install
+```
+
+## Remove all `node_modules` and do a clean install
+```sh
+rm -rf node_modules && pnpm install
+```
+```
