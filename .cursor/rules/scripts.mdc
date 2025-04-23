@@ -1,0 +1,12 @@
+---
+description: Use these rules when writing scripts that help manage the repository
+globs: 
+alwaysApply: false
+---
+## Package scripts
+
+Scripts should be:
+
+- zero-dependency
+- stored in the .bin/ directory
+- have a package.json script entry to run them
