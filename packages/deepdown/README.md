@@ -1,80 +1,129 @@
-# @deepgram/deepdown
+# Deepdown
 
-The main package for Deepdown, a markdown templating format for generating AI-ready documentation from JSON Schema, OpenAPI, and AsyncAPI specifications.
+Markdown templating format for generating AI-ready docs from JSON Schema, OpenAPI, and AsyncAPI specifications.
+
+Built for vector stores and RAG (Retrieval Augmented Generation) workflows, Deepdown helps you create consistent, semantic documentation that's ready for AI applications.
+
+## Overview
+
+Deepdown transforms API specifications and JSON Schema documents into markdown documentation using templating. The resulting output is optimized for:
+
+- Vector databases and embeddings
+- RAG workflows
+- Providing consistent structure for LLM consumption
+- Making complex API documentation accessible to AI systems
 
 ## Installation
 
 ```bash
-npm install @deepgram/deepdown
-# or
-yarn add @deepgram/deepdown
-# or
-pnpm add @deepgram/deepdown
+# NPM
+npm install -g @deepgram/deepdown
+
+# PNPM
+pnpm add -g @deepgram/deepdown
+
+# Yarn
+yarn global add @deepgram/deepdown
+```
+
+## Quick Start
+
+```bash
+# Generate docs from an OpenAPI spec
+deepdown build specs/openapi.yaml templates/api.deepdown --output docs/
+
+# Generate docs from a JSON Schema
+deepdown build specs/schema.json templates/schema.deepdown --output docs/
 ```
 
 ## Usage
 
-```typescript
-import deepdown from '@deepgram/deepdown';
-// or specific imports
-import { build, parseYamlFile, renderTemplate } from '@deepgram/deepdown';
+### Command Line Interface
 
-// Basic usage - build documentation from spec and template files
-const outputFiles = await deepdown.build(
-  'path/to/openapi.yaml', 
-  'path/to/template.md', 
+```bash
+# Basic: Generate docs from a spec and template
+deepdown build <spec-file> <template-file> --output <output-dir>
+
+# Parse multiple spec files
+deepdown build "specs/**/*.yaml" "templates/**/*.deepdown" --output docs/
+
+# Resolve JSON Schema references
+deepdown build specs/api.yaml templates/api.deepdown --output docs/ --resolve-refs
+
+# Resolve security schemes in OpenAPI specs
+deepdown build specs/api.yaml templates/api.deepdown --output docs/ --resolve-refs --resolve-security
+```
+
+### Programmatic Usage
+
+```javascript
+import deepdown from '@deepgram/deepdown';
+
+// Generate docs from a spec and template
+const docs = await deepdown.build(
+  'specs/api.yaml',
+  'templates/api.deepdown',
   { 
-    outputDir: 'path/to/output',
-    resolveRefs: true
+    outputDir: 'docs/',
+    resolveRefs: true,
+    resolveSecurity: true
   }
 );
 
-// Advanced usage - process and render with custom options
-const spec = await parseYamlFile('path/to/api-spec.yaml');
-const result = await renderTemplate(
-  '# {{spec.info.title}}\n\n{{spec.info.description}}', 
-  { spec }
-);
+// Access specific functions
+import { parseYamlFile, renderTemplate } from '@deepgram/deepdown';
+
+const spec = await parseYamlFile('specs/api.yaml');
+const markdown = await renderTemplate('# {{spec.info.title}}', { spec });
 ```
 
-## API Reference
+## Template Format
 
-### Main Functions
+Deepdown templates use Handlebars syntax to access spec data:
 
-- `build(specPaths, templatePaths, options)` - Process specs and templates to generate markdown files
-- `detectSpecType(spec, filename?)` - Auto-detect if a spec is OpenAPI, AsyncAPI, or JSON Schema
+```markdown
+# {{spec.info.title}}
 
-### Parser Functions
+{{spec.info.description}}
 
-- `parseYamlFile(filePath)` - Parse a YAML file into a JavaScript object
-- `parseYamlString(yamlString)` - Parse a YAML string into a JavaScript object
-- `parseMultipleFiles(filePaths)` - Parse multiple YAML files
-- `toJson(object)` - Convert an object to a JSON string
+## Endpoints
 
-### Renderer Functions
+{{#each spec.paths}}
+  {{#each this}}
+### {{@key}} {{../key}}
 
-- `renderTemplate(template, data)` - Render a template string with data
-- `renderTemplateFile(templatePath, data)` - Render a template file with data
-- `renderTemplateFileWithResolvedRefs(templatePath, data, options)` - Render a template file with reference resolution
-- `renderMultipleTemplateFiles(templatePaths, data, outputDir?)` - Render multiple template files
+{{summary}}
 
-### Resolver Functions
+{{description}}
+  {{/each}}
+{{/each}}
+```
 
-- `resolveOpenAPI(spec, options)` - Resolve OpenAPI references and security schemes
-- `resolveAsyncAPI(spec, options)` - Resolve AsyncAPI references and security schemes
+## Advanced Features
 
-## Options
+- Reference resolution for JSON Schema `$ref` pointers
+- Security scheme resolution for OpenAPI and AsyncAPI specs
+- Automatic spec type detection (OpenAPI, AsyncAPI, JSON Schema)
+- Direct upload to vector stores via providers
 
-The `build` function accepts the following options:
+For more details, see [PACKAGES.md](PACKAGES.md).
 
-- `outputDir` - Directory where generated markdown files will be saved
-- `resolveRefs` - Whether to resolve JSON Schema $ref pointers (default: false)
-- `preserveRefs` - Whether to preserve internal $ref pointers when resolving (default: false)
-- `resolveSecurity` - Whether to resolve security schemes for API specs (default: false)
-- `specType` - Force a specific spec type ('openapi', 'asyncapi', or 'jsonschema')
-- `rootKey` - Root key name for the spec data in templates (default: 'spec')
-- `verbose` - Show verbose output during processing
+## Development
+
+Deepdown is a monorepo with multiple packages. See [PACKAGES.md](PACKAGES.md) for details on the package structure and development workflow.
+
+```bash
+# Clone the repository
+git clone https://github.com/deepgram/deepdown.git
+cd deepdown
+
+# Install dependencies
+pnpm install
+
+# Build all packages
+npx lerna run build
+```
 
 ## License
 
-MIT 
+MIT License - Copyright (c) 2025 Deepgram

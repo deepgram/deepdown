@@ -117,4 +117,4 @@ This can be particularly useful for:
 
 - Ensuring all schema content is available in a single document
 - Making it easier to traverse complex schemas in templates
-- Creating more consistent documentation where all schema details are fully expanded 
+- Creating more consistent documentation where all schema details are fully expanded
