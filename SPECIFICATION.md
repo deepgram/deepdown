@@ -14,22 +14,6 @@ The goal is to produce clean, structured, and AI-optimised content from formal s
 
 Each file represents a **single JSON Schema unit** — an object, property, enum, complex type, or API operation. The templating system supports splitting content across multiple files based on schema components or API paths.
 
-### Required Metadata Block
-
-Start with YAML frontmatter to provide metadata used for filtering and retrieval.
-
-```yaml
----
-title: "User Object"
-tags: ["schema", "User", "object"]
-source: "schemas/user.json#/User"
-spec_type: "jsonschema"
-deepdown_version: "0.4"
----
-```
-
-> `source` should ideally reference a stable JSON Pointer or `$id`.
-
 ---
 
 ## Markdown Content Guidelines
