@@ -20,7 +20,310 @@ const program = new Command();
 program
   .name('deepdown')
   .description('Deepdown - Markdown templating tool for generating AI-ready docs')
-  .version('0.0.1');
+  .version('0.0.1')
+  .addHelpText('after', '\nTip: Run "deepdown setup-completion" to enable tab-completion for commands and options.');
+
+// Add a command to show setup instructions
+program
+  .command('setup-completion')
+  .description('Show tab-completion setup instructions')
+  .action(() => {
+    // Use the same code from postinstall.js
+    console.log('\x1b[32m%s\x1b[0m', '✨ Tab-Completion Setup');
+    console.log('\x1b[36m%s\x1b[0m', 'Set up shell tab completion to make working with the CLI easier:');
+    console.log(`
+\x1b[33mBash:\x1b[0m
+  deepdown completion > ~/.deepdown-completion.bash
+  echo 'source ~/.deepdown-completion.bash' >> ~/.bashrc
+  source ~/.bashrc
+
+\x1b[33mZsh:\x1b[0m
+  deepdown completion --shell zsh > ~/.deepdown-completion.zsh
+  echo 'source ~/.deepdown-completion.zsh' >> ~/.zshrc
+  source ~/.zshrc
+
+\x1b[33mFish:\x1b[0m
+  mkdir -p ~/.config/fish/completions
+  deepdown completion --shell fish > ~/.config/fish/completions/deepdown.fish
+
+\x1b[33mPowerShell:\x1b[0m
+  deepdown completion --shell powershell > ~/.deepdown-completion.ps1
+  echo '. ~/.deepdown-completion.ps1' >> $PROFILE
+`);
+  });
+
+// Add autocompletion setup command
+program
+  .command('completion')
+  .description('Generate shell completion script')
+  .option('-s, --shell <type>', 'Shell type: bash, zsh, fish, or powershell', 'bash')
+  .action((options) => {
+    const shell = options.shell.toLowerCase();
+    let script = '';
+    
+    if (shell === 'bash') {
+      script = `
+# Bash completion script for deepdown CLI
+_deepdown_completion() {
+  local cur prev opts
+  COMPREPLY=()
+  cur="\${COMP_WORDS[COMP_CWORD]}"
+  prev="\${COMP_WORDS[COMP_CWORD-1]}"
+  
+  # All available commands
+  opts="build parse render completion"
+  
+  # Complete commands
+  if [[ \${COMP_CWORD} -eq 1 ]]; then
+    COMPREPLY=( $(compgen -W "\${opts}" -- \${cur}) )
+    return 0
+  fi
+  
+  # Command-specific options
+  case "\${COMP_WORDS[1]}" in
+    build)
+      if [[ \${prev} == "-o" || \${prev} == "--output" ]]; then
+        COMPREPLY=( $(compgen -d -- \${cur}) )
+      elif [[ \${prev} == "--spec-type" ]]; then
+        COMPREPLY=( $(compgen -W "openapi asyncapi jsonschema" -- \${cur}) )
+      elif [[ \${cur} == -* ]]; then
+        COMPREPLY=( $(compgen -W "-o --output -v --verbose -r --root-key --resolve-refs --preserve-refs --resolve-security --spec-type" -- \${cur}) )
+      fi
+      ;;
+    parse)
+      if [[ \${prev} == "-o" || \${prev} == "--output" ]]; then
+        COMPREPLY=( $(compgen -d -- \${cur}) )
+      elif [[ \${cur} == -* ]]; then
+        COMPREPLY=( $(compgen -W "-o --output -p --pretty" -- \${cur}) )
+      fi
+      ;;
+    render)
+      if [[ \${prev} == "-o" || \${prev} == "--output" || \${prev} == "-d" || \${prev} == "--data" ]]; then
+        COMPREPLY=( $(compgen -f -- \${cur}) )
+      elif [[ \${prev} == "--spec-type" ]]; then
+        COMPREPLY=( $(compgen -W "openapi asyncapi jsonschema" -- \${cur}) )
+      elif [[ \${cur} == -* ]]; then
+        COMPREPLY=( $(compgen -W "-d --data -o --output -r --root-key --resolve-refs --preserve-refs --resolve-security --spec-type" -- \${cur}) )
+      fi
+      ;;
+    completion)
+      if [[ \${prev} == "-s" || \${prev} == "--shell" ]]; then
+        COMPREPLY=( $(compgen -W "bash zsh fish powershell" -- \${cur}) )
+      elif [[ \${cur} == -* ]]; then
+        COMPREPLY=( $(compgen -W "-s --shell" -- \${cur}) )
+      fi
+      ;;
+  esac
+  
+  return 0
+}
+
+complete -F _deepdown_completion deepdown
+`;
+    } else if (shell === 'zsh') {
+      script = `#compdef deepdown
+# Zsh completion script for deepdown CLI
+
+_deepdown() {
+  local -a commands options
+  
+  commands=(
+    'build:Parse spec files and render templates in a single step'
+    'parse:Parse YAML/JSON spec files'
+    'render:Render markdown from templates and data'
+    'completion:Generate shell completion script'
+  )
+  
+  if (( CURRENT == 2 )); then
+    _describe -t commands 'deepdown commands' commands
+    return
+  fi
+  
+  case "$words[2]" in
+    build)
+      options=(
+        '-o:Output directory:_files -/'
+        '--output:Output directory:_files -/'
+        '-v[Show detailed output]'
+        '--verbose[Show detailed output]'
+        '-r:Root key name for the spec data in templates:'
+        '--root-key:Root key name for the spec data in templates:'
+        '--resolve-refs[Resolve JSON Schema $ref pointers before rendering]'
+        '--preserve-refs[When resolving refs, preserve internal references]'
+        '--resolve-security[Resolve security schemes for OpenAPI/AsyncAPI specs]'
+        '--spec-type:Force specification type:(openapi asyncapi jsonschema)'
+      )
+      _arguments -s $options
+      ;;
+    parse)
+      options=(
+        '-o:Output directory:_files -/'
+        '--output:Output directory:_files -/'
+        '-p[Pretty print JSON output]'
+        '--pretty[Pretty print JSON output]'
+      )
+      _arguments -s $options
+      ;;
+    render)
+      options=(
+        '-d:JSON data file to use:_files'
+        '--data:JSON data file to use:_files'
+        '-o:Output directory:_files -/'
+        '--output:Output directory:_files -/'
+        '-r:Root key name for the spec data in templates:'
+        '--root-key:Root key name for the spec data in templates:'
+        '--resolve-refs[Resolve JSON Schema $ref pointers before rendering]'
+        '--preserve-refs[When resolving refs, preserve internal references]'
+        '--resolve-security[Resolve security schemes for OpenAPI/AsyncAPI specs]'
+        '--spec-type:Force specification type:(openapi asyncapi jsonschema)'
+      )
+      _arguments -s $options
+      ;;
+    completion)
+      options=(
+        '-s:Shell type:(bash zsh fish powershell)'
+        '--shell:Shell type:(bash zsh fish powershell)'
+      )
+      _arguments -s $options
+      ;;
+  esac
+}
+
+compdef _deepdown deepdown
+`;
+    } else if (shell === 'fish') {
+      script = `
+# Fish completion script for deepdown CLI
+function __fish_deepdown_no_subcommand
+    not __fish_seen_subcommand_from build parse render completion
+end
+
+# Main commands
+complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a build -d 'Parse spec files and render templates in a single step'
+complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a parse -d 'Parse YAML/JSON spec files'
+complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a render -d 'Render markdown from templates and data'
+complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a completion -d 'Generate shell completion script'
+
+# build command options
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -s o -l output -d 'Output directory for rendered markdown' -a '(__fish_complete_directories)'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -s v -l verbose -d 'Show detailed output'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -s r -l root-key -d 'Root key name for the spec data in templates'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -l resolve-refs -d 'Resolve JSON Schema $ref pointers before rendering'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -l preserve-refs -d 'When resolving refs, preserve internal references'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -l resolve-security -d 'Resolve security schemes for OpenAPI/AsyncAPI specs'
+complete -c deepdown -f -n '__fish_seen_subcommand_from build' -l spec-type -d 'Force specification type' -a 'openapi asyncapi jsonschema'
+
+# parse command options
+complete -c deepdown -f -n '__fish_seen_subcommand_from parse' -s o -l output -d 'Output directory for parsed JSON' -a '(__fish_complete_directories)'
+complete -c deepdown -f -n '__fish_seen_subcommand_from parse' -s p -l pretty -d 'Pretty print JSON output'
+
+# render command options
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -s d -l data -d 'JSON data file to use' -a '(__fish_complete_path)'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -s o -l output -d 'Output directory for rendered markdown' -a '(__fish_complete_directories)'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -s r -l root-key -d 'Root key name for the spec data in templates'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -l resolve-refs -d 'Resolve JSON Schema $ref pointers before rendering'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -l preserve-refs -d 'When resolving refs, preserve internal references'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -l resolve-security -d 'Resolve security schemes for OpenAPI/AsyncAPI specs'
+complete -c deepdown -f -n '__fish_seen_subcommand_from render' -l spec-type -d 'Force specification type' -a 'openapi asyncapi jsonschema'
+
+# completion command options
+complete -c deepdown -f -n '__fish_seen_subcommand_from completion' -s s -l shell -d 'Shell type' -a 'bash zsh fish powershell'
+`;
+    } else if (shell === 'powershell') {
+      script = `
+# PowerShell completion script for deepdown CLI
+Register-ArgumentCompleter -Native -CommandName deepdown -ScriptBlock {
+    param($wordToComplete, $commandAst, $cursorPosition)
+    
+    $commands = @('build', 'parse', 'render', 'completion')
+    $commandArgs = @{
+        'build' = @{
+            '-o' = $null
+            '--output' = $null
+            '-v' = $null
+            '--verbose' = $null
+            '-r' = $null
+            '--root-key' = $null
+            '--resolve-refs' = $null
+            '--preserve-refs' = $null
+            '--resolve-security' = $null
+            '--spec-type' = @('openapi', 'asyncapi', 'jsonschema')
+        }
+        'parse' = @{
+            '-o' = $null
+            '--output' = $null
+            '-p' = $null
+            '--pretty' = $null
+        }
+        'render' = @{
+            '-d' = $null
+            '--data' = $null
+            '-o' = $null
+            '--output' = $null
+            '-r' = $null
+            '--root-key' = $null
+            '--resolve-refs' = $null
+            '--preserve-refs' = $null
+            '--resolve-security' = $null
+            '--spec-type' = @('openapi', 'asyncapi', 'jsonschema')
+        }
+        'completion' = @{
+            '-s' = @('bash', 'zsh', 'fish', 'powershell')
+            '--shell' = @('bash', 'zsh', 'fish', 'powershell')
+        }
+    }
+    
+    $command = $commandAst.CommandElements | Select-Object -Skip 1 -First 1 -ErrorAction SilentlyContinue
+    if ($command -and $command.Value -in $commands) {
+        $params = $commandArgs[$command.Value]
+        $leftovers = $commandAst.CommandElements | Select-Object -Skip 2
+        
+        $lastParam = $leftovers | Select-Object -Last 1 -ErrorAction SilentlyContinue
+        
+        if ($lastParam -and $params.ContainsKey($lastParam.Value)) {
+            $values = $params[$lastParam.Value]
+            if ($values) {
+                return $values | Where-Object { $_ -like "$wordToComplete*" } | 
+                    ForEach-Object { [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_) }
+            }
+            return
+        }
+        
+        return $params.Keys | Where-Object { $_ -like "$wordToComplete*" } | 
+            ForEach-Object { [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterName', $_) }
+    }
+    else {
+        return $commands | Where-Object { $_ -like "$wordToComplete*" } | 
+            ForEach-Object { [System.Management.Automation.CompletionResult]::new($_, $_, 'Command', $_) }
+    }
+}
+`;
+    } else {
+      console.error(`Unsupported shell type: ${shell}. Supported shells are: bash, zsh, fish, powershell`);
+      process.exit(1);
+    }
+    
+    console.log(`# deepdown CLI completion script for ${shell}`);
+    console.log(script);
+    console.log(`
+# Installation instructions:
+#
+# For bash:
+#   deepdown completion > ~/.deepdown-completion.bash
+#   echo 'source ~/.deepdown-completion.bash' >> ~/.bashrc
+#
+# For zsh:
+#   deepdown completion --shell zsh > ~/.deepdown-completion.zsh
+#   echo 'source ~/.deepdown-completion.zsh' >> ~/.zshrc
+#
+# For fish:
+#   deepdown completion --shell fish > ~/.config/fish/completions/deepdown.fish
+#
+# For PowerShell:
+#   deepdown completion --shell powershell > ~/.deepdown-completion.ps1
+#   echo '. ~/.deepdown-completion.ps1' >> $PROFILE
+`);
+  });
 
 program
   .command('build')
