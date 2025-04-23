@@ -61,38 +61,61 @@ Add constraints or extra info like:
 
 ## Template Format
 
-Deepdown templates use Handlebars syntax to access specification data:
+Deepdown templates use Handlebars syntax with the `.deepdown` extension and start with a YAML frontmatter configuration:
+
+```
+---
+outputPattern: api/{{@pathName}}/{{@methodName}}.md
+splitOn: paths
+groupBy: method
+---
+```
+
+Key frontmatter options:
+- `splitOn`: Specifies the path to iterate over (e.g., `paths`, `components.schemas`)
+- `outputPattern`: Defines the output file pattern using variables like `{{@pathName}}`, `{{@methodName}}`, `{{@schemaName}}`
+- `groupBy`: Optional grouping parameter (e.g., `method` for API operations)
+
+The template body uses Handlebars helpers and conditionals:
 
 ```markdown
-# {{spec.title}}
+# {{uppercase methodName}} {{pathName}}
 
-{{spec.description}}
+{{description}}
 
-## Properties
+## Table of Contents
 
-{{#each spec.properties}}
-### `{{@key}}`
-
-- **Type**: `{{type}}`
-{{#if format}}
-- **Format**: `{{format}}`
-{{/if}}
-- **Required**: {{#if ../required}}{{#includes ../required @key}}Yes{{else}}No{{/includes}}{{else}}No{{/if}}
-{{#if description}}
-- **Description**: {{description}}
+- [Overview](#overview)
+- [API Information](#api-information)
+{{#if parameters}}
+- [Parameters](#parameters)
 {{/if}}
 
+## Overview
+
+{{summary}}
+
+## API Information
+
+- **API**: {{spec.info.title}} (v{{spec.info.version}})
+- **Endpoint**: `{{uppercase methodName}} {{pathName}}`
+
+{{#if parameters}}
+## Parameters
+
+| Name | Located In | Required | Type | Description |
+|------|------------|:--------:|------|-------------|
+{{#each parameters}}
+| `{{name}}` | {{in}} | {{#if required}}Yes{{else}}No{{/if}} | {{schema.type}} | {{description}} |
 {{/each}}
+{{/if}}
 ```
 
-Templates can include frontmatter to configure output patterns:
-
-```
----
-splitOn: components.schemas
-outputPattern: schemas/{{@schemaName}}.md
----
-```
+Standard Handlebars features:
+- `{{#if}}...{{else}}...{{/if}}` for conditionals
+- `{{#each}}...{{/each}}` for iteration
+- `{{@key}}` for accessing the current key in an object
+- Helpers like `uppercase`, `lowercase`, `json`, `includes`
 
 ---
 
