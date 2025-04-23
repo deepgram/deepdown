@@ -1,0 +1,30 @@
+{
+  "name": "@deepgram/deepdown-provider-pinecone",
+  "version": "0.0.1",
+  "description": "Pinecone provider for Deepdown - uploads markdown to Pinecone vector store",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "dev": "tsc -w"
+  },
+  "keywords": [
+    "pinecone",
+    "vector store",
+    "deepdown",
+    "provider"
+  ],
+  "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
+  "license": "MIT",
+  "dependencies": {
+    "@pinecone-database/pinecone": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.2"
+  }
+} 

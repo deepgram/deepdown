@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Git requirements
+
+After you make a code change, commit it immediately with a conventional commits commit message and body detailing the change you made.

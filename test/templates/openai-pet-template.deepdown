@@ -1,0 +1,218 @@
+---
+outputPattern: api/{{@pathName}}/{{@methodName}}.md
+splitOn: paths
+groupBy: method
+---
+# {{uppercase methodName}} {{pathName}}
+
+{{description}}
+
+## Table of Contents
+
+- [Overview](#overview)
+- [API Information](#api-information)
+- [Authentication](#authentication)
+{{#if parameters}}
+- [Parameters](#parameters)
+{{/if}}
+{{#if requestBody}}
+- [Request Body](#request-body)
+{{/if}}
+- [Response](#response)
+- [Example Usage](#example-usage)
+
+## Overview
+
+{{summary}}
+
+## API Information
+
+- **API**: {{spec.info.title}} (v{{spec.info.version}})
+- **Operation ID**: `{{operationId}}`
+- **Endpoint**: `{{uppercase methodName}} {{pathName}}`
+
+## Authentication
+{{#if security}}
+
+Authentication is required for this endpoint:
+
+{{#each security}}
+{{#each this}}
+- **{{@key}}**: {{#each this}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/each}}
+{{/each}}
+{{else}}
+
+No authentication is required for this endpoint.
+{{/if}}
+## Authentication
+{{#if resolvedSecurity}}
+
+Authentication is required for this endpoint:
+
+{{#each resolvedSecurity}}
+
+```json
+{{{json this}}}
+```
+
+```text
+{{curlAuth this}}
+```
+
+{{/each}}
+{{else}}
+
+No authentication is required for this endpoint.
+{{/if}}
+{{#if parameters}}
+
+## Parameters
+
+| Name | Located In | Required | Type | Description |
+|------|------------|:--------:|------|-------------|
+{{#each parameters}}
+| `{{name}}` | {{in}} | {{#if required}}Yes{{else}}No{{/if}} | {{#if schema.type}}{{schema.type}}{{#if schema.format}} ({{schema.format}}){{/if}}{{#if schema.enum}} [{{#each schema.enum}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}{{else}}object{{/if}} | {{description}} |
+{{/each}}
+{{/if}}
+{{#if requestBody}}
+
+## Request Body
+
+{{requestBody.description}}
+
+{{#if requestBody.content}}
+{{#each requestBody.content}}
+
+### Content Type: `{{@key}}`
+
+{{#if schema}}
+{{#if schema.properties}}
+| Property | Type | Required | Description |
+|----------|------|:--------:|-------------|
+{{#each schema.properties}}
+| `{{@key}}` | {{#if type}}{{type}}{{#if format}} ({{format}}){{/if}}{{#if enum}} [{{#each enum}}{{this}}{{#unless
+@last}}, {{/unless}}{{/each}}]{{/if}}{{else}}object{{/if}} | {{#if ../required}}{{#if (includes ../required
+@key)}}Yes{{else}}No{{/if}}{{else}}No{{/if}} | {{description}} |
+{{/each}}
+
+
+{{/if}}
+{{/if}}
+
+{{/each}}
+{{/if}}
+
+
+
+{{/if}}
+
+## Response
+
+{{#each responses}}
+### Status Code: `{{@key}}`
+
+{{description}}
+
+{{#if content}}
+{{#each content}}
+
+#### Content Type: `{{@key}}`
+
+{{#if schema}}
+{{#if schema.properties}}
+| Property | Type | Description |
+|----------|------|-------------|
+{{#each schema.properties}}
+| `{{@key}}` | {{#if type}}{{type}}{{#if format}} ({{format}}){{/if}}{{#if enum}} [{{#each enum}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}{{else}}object{{/if}} | {{description}} |
+{{/each}}
+{{else}}
+{{#if schema.$ref}}
+
+References schema: `{{schema.$ref}}`
+{{else}}
+{{#if schema.type}}
+
+Type: `{{schema.type}}`
+{{#if schema.items}}
+
+Items: {{#if schema.items.$ref}}References `{{schema.items.$ref}}`{{else}}Type `{{schema.items.type}}`{{/if}}
+{{/if}}
+{{/if}}
+{{/if}}
+{{/if}}
+{{/if}}
+{{/each}}
+{{/if}}
+{{/each}}
+
+## Example Usage
+
+### cURL
+
+```bash
+curl -X {{uppercase methodName}} "{{spec.servers.0.url}}{{pathName}}{{#if parameters}}{{#each parameters}}{{#eq in "path"}}/{{example}}{{/eq}}{{/each}}{{/if}}" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json"{{#if requestBody}}{{#if requestBody.content.application/json}} \
+  -d '{
+  {{#each requestBody.content.application/json.schema.properties}}
+    "{{@key}}": "{{#if example}}{{example}}{{else}}example_{{@key}}{{/if}}"{{#unless @last}},{{/unless}}
+  {{/each}}
+  }'{{/if}}{{/if}}
+```
+{{!-- 
+### JavaScript
+
+```javascript
+const fetch = require('node-fetch');
+
+const options = {
+  method: '{{uppercase @methodName}}',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }{{#if requestBody}}{{#if requestBody.content.application/json}},
+  body: JSON.stringify({
+    {{#each requestBody.content.application/json.schema.properties}}
+    "{{@key}}": "{{#if example}}{{example}}{{else}}example_{{@key}}{{/if}}"{{#unless @last}},{{/unless}}
+    {{/each}}
+  }){{/if}}{{/if}}
+};
+
+fetch('{{@pathName}}{{#if parameters}}{{#each parameters}}{{#eq in "path"}}/{{#if example}}{{example}}{{else}}example_value{{/if}}{{/eq}}{{/each}}{{/if}}', options)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+import requests
+import json
+
+url = "{{@pathName}}{{#if parameters}}{{#each parameters}}{{#eq in "path"}}/{{#if example}}{{example}}{{else}}example_value{{/if}}{{/eq}}{{/each}}{{/if}}"
+
+payload = {
+{{#if requestBody}}{{#if requestBody.content.application/json}}
+  {{#each requestBody.content.application/json.schema.properties}}
+  "{{@key}}": "{{#if example}}{{example}}{{else}}example_{{@key}}{{/if}}"{{#unless @last}},{{/unless}}
+  {{/each}}
+{{/if}}{{/if}}
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("{{uppercase @methodName}}", url, headers=headers, data=json.dumps(payload))
+
+print(response.text)
+``` --}}
+
+---
+
+## Disclaimer: Deepdown
+
+_This Markdown file was generated using [**Deepdown**](https://github.com/deepgram/deepdown), a templating format for AI-ready JSON Schema content._
+_Do not edit this file directly — update the `.deepdown` source instead._

@@ -1,0 +1,16 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project details:
+
+This is a Lerna project: Version 8
+
+> ERR! bootstrap The "bootstrap" command was removed by default in v7, and is no longer maintained.
+> ERR! bootstrap Learn more about this change at https://lerna.js.org/docs/legacy-package-management
+>
+> In lerna v7.0.0, we removed the lerna bootstrap, lerna add and lerna link commands in lerna by default.
+
+When creating a new pacakage, you'll likely have to built/install to resolve package references
+

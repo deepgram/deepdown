@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "paths": {
+      "@deepgram/deepdown-parser": ["../parser/src"],
+      "@deepgram/deepdown-renderer": ["../renderer/src"]
+    }
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../parser" },
+    { "path": "../renderer" }
+  ]
+} 

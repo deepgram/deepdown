@@ -1,0 +1,38 @@
+{
+  "name": "@deepgram/deepdown-cli",
+  "version": "0.0.1",
+  "description": "Command-line interface for Deepdown",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "deepdown": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "dev": "tsc -w"
+  },
+  "keywords": [
+    "cli",
+    "deepdown",
+    "markdown",
+    "generator"
+  ],
+  "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
+  "license": "MIT",
+  "dependencies": {
+    "@deepgram/deepdown-parser": "workspace:^0.0.1",
+    "@deepgram/deepdown-renderer": "workspace:^0.0.1",
+    "@deepgram/deepdown-resolver-asyncapi": "workspace:^",
+    "@deepgram/deepdown-resolver-openapi": "workspace:^",
+    "commander": "^11.1.0",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.2"
+  }
+}

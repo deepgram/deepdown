@@ -1,0 +1,22 @@
+{
+  "name": "@deepgram/deepdown-utils",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "deepgram",
+    "deepdown",
+    "markdown",
+    "utilities"
+  ],
+  "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
+  "license": "MIT",
+  "description": "Utility functions for Deepdown markdown templating"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@deepgram/deepdown-core",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepgram/deepdown-utils": "workspace:^0.0.1"
+  },
+  "keywords": [
+    "deepgram",
+    "deepdown",
+    "markdown",
+    "templating"
+  ],
+  "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
+  "license": "MIT",
+  "description": "Core functionality for Deepdown markdown templating"
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@deepgram/deepdown",
+  "version": "0.0.3",
+  "description": "Markdown templating format for generating AI-ready docs from JSON Schema, built for vector stores and RAG workflows.",
+  "main": "README.md",
+  "bin": {
+    "deepdown": "./packages/cli/dist/cli.js"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "clean": "lerna run clean",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "dev": "lerna run dev --parallel",
+    "bootstrap": "pnpm install",
+    "publish": "lerna publish"
+  },
+  "keywords": [
+    "markdown",
+    "templating",
+    "json schema",
+    "vector stores",
+    "rag"
+  ],
+  "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deepgram/deepdown.git"
+  },
+  "homepage": "https://github.com/deepgram/deepdown",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "lerna": "^8.2.2",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.8.3"
+  }
+}

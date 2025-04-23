@@ -1,0 +1,19 @@
+{
+  "info": {
+    "title": "Test OpenAPI Specification",
+    "version": "1.0.0",
+    "description": "A test API specification"
+  },
+  "paths": {
+    "/test": {
+      "get": {
+        "summary": "Test endpoint",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
+} 

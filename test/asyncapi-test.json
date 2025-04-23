@@ -1,0 +1,24 @@
+{
+  "info": {
+    "title": "Test AsyncAPI Specification",
+    "version": "1.0.0",
+    "description": "A test event-driven API specification"
+  },
+  "channels": {
+    "test/topic": {
+      "publish": {
+        "summary": "Test channel",
+        "message": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 
