@@ -1,77 +1,16 @@
-import * as parser from '@deepgram/deepdown-parser';
-import * as renderer from '@deepgram/deepdown-renderer';
-import * as path from 'path';
-import { glob } from 'glob';
-
-// Re-export from sub-packages
-export { parser, renderer };
-
-// Export API for programmatic usage
-export async function parseFiles(
-  files: string[], 
-  outputDir?: string, 
-  pretty = false
-): Promise<any[]> {
-  const parsedFiles = parser.parseMultipleFiles(files);
-  
-  return parsedFiles.map((file: { path: string; content: any }) => file.content);
-}
-
-export async function renderTemplates(
-  templates: string[],
-  data: any,
-  outputDir?: string
-): Promise<string[]> {
-  return renderer.renderMultipleTemplateFiles(
-    templates,
-    data,
-    outputDir
-  );
-}
-
 /**
- * Build project by parsing spec files and rendering templates in a single step
- * @param specPattern Glob pattern for spec files
- * @param templatePattern Glob pattern for template files
- * @param outputDir Optional output directory for rendered files
- * @returns Array of rendered markdown content
+ * @deepgram/deepdown-cli - CLI for Deepdown markdown templating
+ * 
+ * This package provides command line interface for the @deepgram/deepdown package.
+ * It allows users to build documentation from spec files and templates directly from the terminal.
  */
-export async function buildProject(
-  specPattern: string,
-  templatePattern: string,
-  outputDir?: string
-): Promise<string[]> {
-  // Find spec files
-  const specFiles = await glob(specPattern);
-  if (specFiles.length === 0) {
-    throw new Error(`No spec files found matching pattern: ${specPattern}`);
-  }
-  
-  // Parse spec files
-  const parsedFiles = parser.parseMultipleFiles(specFiles);
-  const parsedData = parsedFiles.reduce((result: Record<string, any>, file: { path: string; content: any }) => {
-    // Use the filename without extension as the key
-    const key = path.basename(file.path, path.extname(file.path));
-    result[key] = file.content;
-    return result;
-  }, {});
-  
-  // Find template files
-  const templateFiles = await glob(templatePattern);
-  if (templateFiles.length === 0) {
-    throw new Error(`No template files found matching pattern: ${templatePattern}`);
-  }
-  
-  // Render templates with parsed data
-  return renderer.renderMultipleTemplateFiles(
-    templateFiles,
-    parsedData,
-    outputDir
-  );
-}
 
-export default {
-  parseFiles,
-  renderTemplates,
-  buildProject
-}; 
+// Re-export everything from the main package
+export * from '@deepgram/deepdown';
+
+// Export the CLI functionality
+import './cli'; // The CLI file doesn't export anything, it just runs the command
+
+// Re-export the default export from the main package
+import deepdown from '@deepgram/deepdown';
+export default deepdown; 

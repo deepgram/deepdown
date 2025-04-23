@@ -4,16 +4,16 @@ import { Command } from 'commander';
 import { glob } from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { parseMultipleFiles, parseYamlFile } from '@deepgram/deepdown-parser';
-import { 
+import deepdown, {
+  parseMultipleFiles, 
+  parseYamlFile,
   renderMultipleTemplateFiles, 
-  renderMultipleTemplateFilesWithResolvedRefs
-} from '@deepgram/deepdown-renderer';
-import { SchemaRefResolverOptions } from '@deepgram/deepdown-renderer/dist/schema-resolver';
-
-// We'll need to build the packages first for these imports to work
-import openAPIResolver from '@deepgram/deepdown-resolver-openapi';
-import asyncAPIResolver from '@deepgram/deepdown-resolver-asyncapi';
+  renderMultipleTemplateFilesWithResolvedRefs,
+  resolveOpenAPI,
+  resolveAsyncAPI,
+  detectSpecType,
+  SchemaRefResolverOptions
+} from '@deepgram/deepdown';
 
 const program = new Command();
 
@@ -36,37 +36,25 @@ program
   .option('--spec-type <type>', 'Force specification type (openapi, asyncapi, jsonschema)', '')
   .action(async (specsPattern, templatesPattern, options) => {
     try {
-      // Find the spec files
+      // Use the unified build function from the main package
+      const buildOptions = {
+        outputDir: options.output,
+        resolveRefs: options.resolveRefs,
+        preserveRefs: options.preserveRefs,
+        resolveSecurity: options.resolveSecurity,
+        rootKey: options.rootKey,
+        verbose: options.verbose,
+        specType: options.specType || undefined
+      };
+      
+      // If using glob patterns, resolve them first
       const specFiles = await glob(specsPattern);
+      const templateFiles = await glob(templatesPattern);
       
       if (specFiles.length === 0) {
         console.error(`No spec files found matching pattern: ${specsPattern}`);
         process.exit(1);
       }
-      
-      if (options.verbose) {
-        console.log(`Found ${specFiles.length} spec files`);
-      }
-      
-      // Parse the spec files in memory
-      const parsedFiles = parseMultipleFiles(specFiles);
-      const parsedData: Record<string, any> = {};
-      
-      // Use the rootKey option or the filename as the key
-      if (parsedFiles.length === 1) {
-        // If there's only one file, use the rootKey directly
-        parsedData[options.rootKey] = parsedFiles[0].content;
-      } else {
-        // If there are multiple files, use rootKey as the parent with filenames as sub-keys
-        parsedData[options.rootKey] = {};
-        parsedFiles.forEach((file: { path: string; content: any }) => {
-          const key = path.basename(file.path, path.extname(file.path));
-          parsedData[options.rootKey][key] = file.content;
-        });
-      }
-      
-      // Find the template files
-      const templateFiles = await glob(templatesPattern);
       
       if (templateFiles.length === 0) {
         console.error(`No template files found matching pattern: ${templatesPattern}`);
@@ -74,100 +62,16 @@ program
       }
       
       if (options.verbose) {
-        console.log(`Found ${templateFiles.length} template files`);
+        console.log(`Found ${specFiles.length} spec files and ${templateFiles.length} template files`);
       }
       
-      let renderedFiles;
-      
-      // Choose whether to resolve references based on the option
-      if (options.resolveRefs) {
-        if (options.verbose) {
-          console.log('Resolving references before rendering');
-        }
-        
-        // Detect spec type if not explicitly provided
-        let specType = options.specType;
-        if (!specType && parsedData[options.rootKey]) {
-          const spec = parsedData[options.rootKey];
-          // If we're using parsedFiles which has the file path, use that for filename detection
-          const filename = parsedFiles.length === 1 ? 
-            path.basename(parsedFiles[0].path) : 
-            '';
-          specType = detectSpecType(spec, filename) || 'jsonschema';
-        }
-        
-        if (options.verbose) {
-          console.log(`Detected spec type: ${specType}`);
-        }
-        
-        // If it's an OpenAPI or AsyncAPI spec and we should resolve security schemes
-        if (options.resolveRefs && options.resolveSecurity) {
-          if (options.verbose) {
-            console.log('Using specialized resolver for security schemes');
-          }
-          
-          // Create a deep copy of the data
-          const dataCopy = JSON.parse(JSON.stringify(parsedData));
-          
-          // Apply the appropriate resolver based on spec type
-          if (specType === 'openapi' && dataCopy[options.rootKey]) {
-            if (options.verbose) {
-              console.log('Resolving OpenAPI references and security schemes');
-            }
-            dataCopy[options.rootKey] = await openAPIResolver.resolveOpenAPI(dataCopy[options.rootKey], {
-              preserveRefs: options.preserveRefs,
-              resolveSecurity: true
-            });
-          } else if (specType === 'asyncapi' && dataCopy[options.rootKey]) {
-            if (options.verbose) {
-              console.log('Resolving AsyncAPI references and security schemes');
-            }
-            dataCopy[options.rootKey] = await asyncAPIResolver.resolveAsyncAPI(dataCopy[options.rootKey], {
-              preserveRefs: options.preserveRefs,
-              resolveSecurity: true
-            });
-          } else {
-            // Fall back to standard JSON Schema ref resolution
-            if (options.verbose) {
-              console.log('Using standard JSON Schema reference resolution');
-            }
-          }
-          
-          // Use the already resolved data with the standard renderer
-          renderedFiles = renderMultipleTemplateFiles(
-            templateFiles,
-            dataCopy,
-            options.output
-          );
-        } else {
-          // Use the standard ref-resolving renderer
-          const refResolutionOptions: SchemaRefResolverOptions = {
-            preserveRefs: options.preserveRefs,
-            specType: specType as any
-          };
-          
-          renderedFiles = await renderMultipleTemplateFilesWithResolvedRefs(
-            templateFiles,
-            parsedData,
-            options.output,
-            undefined, // helpers
-            refResolutionOptions
-          );
-        }
-      } else {
-        // Use the standard renderer without reference resolution
-        renderedFiles = renderMultipleTemplateFiles(
-          templateFiles,
-          parsedData,
-          options.output
-        );
-      }
+      const renderedFiles = await deepdown.build(specFiles, templateFiles, buildOptions);
       
       if (options.output) {
         console.log(`Rendered files written to ${options.output}`);
       } else {
-        // Output to console
-        renderedFiles.forEach((result: string, index: number) => {
+        // Output to console if no output directory specified
+        renderedFiles.forEach((result, index) => {
           console.log(`\n--- ${templateFiles[index]} ---\n`);
           console.log(result);
         });
@@ -289,13 +193,13 @@ program
           // Apply the appropriate resolver based on spec type
           if (specType === 'openapi' && dataCopy[options.rootKey]) {
             console.log('Resolving OpenAPI references and security schemes');
-            dataCopy[options.rootKey] = await openAPIResolver.resolveOpenAPI(dataCopy[options.rootKey], {
+            dataCopy[options.rootKey] = await resolveOpenAPI(dataCopy[options.rootKey], {
               preserveRefs: options.preserveRefs,
               resolveSecurity: true
             });
           } else if (specType === 'asyncapi' && dataCopy[options.rootKey]) {
             console.log('Resolving AsyncAPI references and security schemes');
-            dataCopy[options.rootKey] = await asyncAPIResolver.resolveAsyncAPI(dataCopy[options.rootKey], {
+            dataCopy[options.rootKey] = await resolveAsyncAPI(dataCopy[options.rootKey], {
               preserveRefs: options.preserveRefs,
               resolveSecurity: true
             });
@@ -348,78 +252,5 @@ program
       process.exit(1);
     }
   });
-
-// Add this helper function for improved spec detection
-/**
- * Detects the type of API specification based on its content and filename
- * @param spec - The specification object
- * @param filename - Optional filename to check for hints
- * @returns The detected spec type, or undefined if not recognized
- */
-function detectSpecType(spec: any, filename?: string): 'openapi' | 'asyncapi' | 'jsonschema' | undefined {
-  if (!spec) {
-    return undefined;
-  }
-
-  // Check for OpenAPI spec
-  if (
-    // OpenAPI 3.x has 'openapi' field
-    spec.openapi || 
-    // Swagger 2.0 has 'swagger' field
-    spec.swagger || 
-    // Check info title for keywords
-    (spec.info?.title && 
-      (spec.info.title.toLowerCase().includes('openapi') || 
-       spec.info.title.toLowerCase().includes('swagger')))
-  ) {
-    return 'openapi';
-  }
-
-  // Check for AsyncAPI spec
-  if (
-    // AsyncAPI has 'asyncapi' field
-    spec.asyncapi || 
-    // Check info title for keywords
-    (spec.info?.title && 
-      spec.info.title.toLowerCase().includes('asyncapi'))
-  ) {
-    return 'asyncapi';
-  }
-
-  // If filename is provided, check it for hints
-  if (filename) {
-    const lowerFilename = filename.toLowerCase();
-    
-    // Check for OpenAPI/Swagger in filename
-    if (
-      lowerFilename.includes('openapi') ||
-      lowerFilename.includes('swagger') ||
-      lowerFilename.includes('api-spec')
-    ) {
-      return 'openapi';
-    }
-    
-    // Check for AsyncAPI in filename
-    if (
-      lowerFilename.includes('asyncapi') ||
-      lowerFilename.includes('async-api') ||
-      lowerFilename.includes('event-api')
-    ) {
-      return 'asyncapi';
-    }
-  }
-
-  // Fallback to generic JSON Schema
-  if (
-    // Check for JSON Schema specific fields
-    spec.$schema ||
-    spec.properties ||
-    spec.type
-  ) {
-    return 'jsonschema';
-  }
-
-  return undefined;
-}
 
 program.parse();
