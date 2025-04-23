@@ -1,5 +1,5 @@
 {
-  "name": "@deepgram/deepdown",
+  "name": "@deepgram/deepdown-project",
   "version": "0.0.3",
   "description": "Markdown templating format for generating AI-ready docs from JSON Schema, built for vector stores and RAG workflows.",
   "main": "README.md",
