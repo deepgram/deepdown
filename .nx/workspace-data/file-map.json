@@ -1,0 +1,354 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.8.0",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".cursor/mcp.json",
+        "hash": "8589106190997341241"
+      },
+      {
+        "file": "example/specs/pets.yaml",
+        "hash": "5911308054776024282"
+      },
+      {
+        "file": "jest.config.js",
+        "hash": "10970939766065857207"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "1038190505859968275"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "11004490603079826795"
+      },
+      {
+        "file": "README.md",
+        "hash": "5830917562607509571"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "15735401206881883000"
+      },
+      {
+        "file": "example/templates/debug-template.deepdown",
+        "hash": "17955894747158863605"
+      },
+      {
+        "file": ".cursor/rules/lerna.mdc",
+        "hash": "14924491383446122258"
+      },
+      {
+        "file": "pnpm-workspace.yaml",
+        "hash": "8948819654112859134"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "10747437171080394482"
+      },
+      {
+        "file": "package.json",
+        "hash": "5044402887914255885"
+      },
+      {
+        "file": "LICENSE",
+        "hash": "18244957933930671867"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "16487129862755739991"
+      },
+      {
+        "file": "PACKAGES.md",
+        "hash": "9187971329800956107"
+      },
+      {
+        "file": "SPECIFICATION.md",
+        "hash": "4381817898635098248"
+      },
+      {
+        "file": "example/templates/openapi-pet-template.deepdown",
+        "hash": "12488099109915799244"
+      },
+      {
+        "file": "commitlint.config.js",
+        "hash": "16794181155313711642"
+      },
+      {
+        "file": ".cursor/rules/scripts.mdc",
+        "hash": "6686801925397151401"
+      },
+      {
+        "file": "lerna.json",
+        "hash": "15480441684257141337"
+      },
+      {
+        "file": ".husky/commit-msg",
+        "hash": "7872963897278201256"
+      },
+      {
+        "file": ".bin/copy-readme.js",
+        "hash": "2865596545677766751"
+      },
+      {
+        "file": ".cursor/rules/app.mdc",
+        "hash": "18146244090107760030"
+      },
+      {
+        "file": "example/specs/pets.json",
+        "hash": "6601737422489687363"
+      },
+      {
+        "file": ".cursor/rules/git.mdc",
+        "hash": "15942316997860237632"
+      }
+    ],
+    "projectFileMap": {
+      "@deepgram/deepdown-openapi": [
+        {
+          "file": "packages/openapi/package.json",
+          "hash": "12789997295255304000",
+          "deps": [
+            "npm:@apidevtools/json-schema-ref-parser",
+            "@deepgram/deepdown-renderer"
+          ]
+        },
+        {
+          "file": "packages/openapi/src/index.ts",
+          "hash": "8664936644737411193"
+        },
+        {
+          "file": "packages/openapi/tsconfig.json",
+          "hash": "1972948743519014057"
+        }
+      ],
+      "@deepgram/deepdown-utils": [
+        {
+          "file": "packages/utils/package.json",
+          "hash": "10965907773684945961"
+        },
+        {
+          "file": "packages/utils/src/index.ts",
+          "hash": "15302527220768207899"
+        },
+        {
+          "file": "packages/utils/tsconfig.json",
+          "hash": "2200616474687646694"
+        }
+      ],
+      "@deepgram/deepdown-asyncapi": [
+        {
+          "file": "packages/asyncapi/package.json",
+          "hash": "1564038429444991595",
+          "deps": [
+            "npm:@apidevtools/json-schema-ref-parser",
+            "@deepgram/deepdown-renderer"
+          ]
+        },
+        {
+          "file": "packages/asyncapi/src/index.ts",
+          "hash": "1754586224812031903"
+        },
+        {
+          "file": "packages/asyncapi/tsconfig.json",
+          "hash": "1972948743519014057"
+        }
+      ],
+      "@deepgram/deepdown-cli": [
+        {
+          "file": "packages/cli/package.json",
+          "hash": "17115199163333590956",
+          "deps": [
+            "@deepgram/deepdown",
+            "npm:commander",
+            "npm:glob"
+          ]
+        },
+        {
+          "file": "packages/cli/src/cli.ts",
+          "hash": "16516444135667485723"
+        },
+        {
+          "file": "packages/cli/src/index.ts",
+          "hash": "3476508988311154795"
+        },
+        {
+          "file": "packages/cli/tsconfig.json",
+          "hash": "14827386529759571056"
+        }
+      ],
+      "@deepgram/deepdown-provider-pinecone": [
+        {
+          "file": "packages/provider-pinecone/package.json",
+          "hash": "8801720115831418268",
+          "deps": [
+            "npm:@pinecone-database/pinecone"
+          ]
+        },
+        {
+          "file": "packages/provider-pinecone/src/index.ts",
+          "hash": "787770293613333406"
+        },
+        {
+          "file": "packages/provider-pinecone/tsconfig.json",
+          "hash": "1303709558539290189"
+        }
+      ],
+      "@deepgram/deepdown-resolver-asyncapi": [
+        {
+          "file": "packages/resolver-asyncapi/package.json",
+          "hash": "8093059289316686493",
+          "deps": [
+            "npm:@apidevtools/json-schema-ref-parser",
+            "@deepgram/deepdown-renderer"
+          ]
+        },
+        {
+          "file": "packages/resolver-asyncapi/src/index.ts",
+          "hash": "1754586224812031903"
+        },
+        {
+          "file": "packages/resolver-asyncapi/tsconfig.json",
+          "hash": "1972948743519014057"
+        }
+      ],
+      "@deepgram/deepdown-core": [
+        {
+          "file": "packages/core/package.json",
+          "hash": "8486565954313590808",
+          "deps": [
+            "@deepgram/deepdown-utils"
+          ]
+        },
+        {
+          "file": "packages/core/src/index.ts",
+          "hash": "6480208133265450151"
+        },
+        {
+          "file": "packages/core/tsconfig.json",
+          "hash": "2200616474687646694"
+        }
+      ],
+      "@deepgram/deepdown-resolver-openapi": [
+        {
+          "file": "packages/resolver-openapi/package.json",
+          "hash": "17519567068918993158",
+          "deps": [
+            "npm:@apidevtools/json-schema-ref-parser",
+            "@deepgram/deepdown-renderer"
+          ]
+        },
+        {
+          "file": "packages/resolver-openapi/src/index.ts",
+          "hash": "8664936644737411193"
+        },
+        {
+          "file": "packages/resolver-openapi/tsconfig.json",
+          "hash": "1972948743519014057"
+        }
+      ],
+      "@deepgram/deepdown": [
+        {
+          "file": "packages/deepdown/README.md",
+          "hash": "8854818214995658302"
+        },
+        {
+          "file": "packages/deepdown/package.json",
+          "hash": "8431309061829157833",
+          "deps": [
+            "@deepgram/deepdown-core",
+            "@deepgram/deepdown-parser",
+            "@deepgram/deepdown-renderer",
+            "@deepgram/deepdown-resolver-openapi",
+            "@deepgram/deepdown-resolver-asyncapi"
+          ]
+        },
+        {
+          "file": "packages/deepdown/src/index.ts",
+          "hash": "2434606961994916024"
+        },
+        {
+          "file": "packages/deepdown/tsconfig.json",
+          "hash": "2200616474687646694"
+        }
+      ],
+      "@deepgram/deepdown-renderer": [
+        {
+          "file": "packages/renderer/__tests__/__fixtures__/data/sample.json",
+          "hash": "9534378809698712287"
+        },
+        {
+          "file": "packages/renderer/__tests__/__fixtures__/templates/simple.deepdown",
+          "hash": "6052470217214052536"
+        },
+        {
+          "file": "packages/renderer/__tests__/__snapshots__/index.test.ts.snap",
+          "hash": "5354893968906506954"
+        },
+        {
+          "file": "packages/renderer/__tests__/index.test.ts",
+          "hash": "16497351102158284286"
+        },
+        {
+          "file": "packages/renderer/__tests__/setup.ts",
+          "hash": "8357278269527562978"
+        },
+        {
+          "file": "packages/renderer/__tests__/snapshotResolver.cjs",
+          "hash": "17579179808775950051"
+        },
+        {
+          "file": "packages/renderer/jest.config.js",
+          "hash": "3950781764843486112"
+        },
+        {
+          "file": "packages/renderer/package.json",
+          "hash": "8174476903968065337",
+          "deps": [
+            "npm:@types/marked",
+            "npm:@apidevtools/json-schema-ref-parser",
+            "npm:handlebars",
+            "npm:marked"
+          ]
+        },
+        {
+          "file": "packages/renderer/src/index.ts",
+          "hash": "9479642734082863356"
+        },
+        {
+          "file": "packages/renderer/src/schema-resolver.ts",
+          "hash": "14874060248000175058"
+        },
+        {
+          "file": "packages/renderer/tsconfig.json",
+          "hash": "1303709558539290189"
+        },
+        {
+          "file": "packages/renderer/tsconfig.test.json",
+          "hash": "14456542375227124424"
+        }
+      ],
+      "@deepgram/deepdown-parser": [
+        {
+          "file": "packages/parser/package.json",
+          "hash": "9780442541112452191",
+          "deps": [
+            "npm:@types/js-yaml",
+            "npm:js-yaml"
+          ]
+        },
+        {
+          "file": "packages/parser/src/index.ts",
+          "hash": "6740441871495500368"
+        },
+        {
+          "file": "packages/parser/tsconfig.json",
+          "hash": "1303709558539290189"
+        }
+      ]
+    }
+  }
+}

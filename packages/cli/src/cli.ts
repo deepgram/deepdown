@@ -5,8 +5,7 @@ import { glob } from 'glob';
 import path from 'path';
 import fs from 'fs';
 import deepdown, {
-  parseMultipleFiles, 
-  parseYamlFile,
+  parseMultipleFiles,
   renderMultipleTemplateFiles, 
   renderMultipleTemplateFilesWithResolvedRefs,
   resolveOpenAPI,

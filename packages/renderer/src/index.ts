@@ -295,6 +295,9 @@ export function renderTemplateFile(options: RenderFileOptions): string | string[
               }
             });
             
+            console.log('methodName value:', context['@methodName']);
+            console.log('After replacements, outputFilePath:', outputFilePath);
+            
             // Replace any remaining template variables with empty string
             outputFilePath = outputFilePath.replace(/{{[^}]+}}/g, '');
             
@@ -305,8 +308,8 @@ export function renderTemplateFile(options: RenderFileOptions): string | string[
             
             // Replace any invalid characters in the filepath
             outputFilePath = outputFilePath
-              .replace(/[\{\}]/g, '_') // Replace path parameter braces with underscores
-              .replace(/[<>:"\|?*]/g, '_'); // Replace other invalid filename characters
+              .replace(/[{}]/g, '_') // Replace path parameter braces with underscores
+              .replace(/[<>:"|?*]/g, '_'); // Replace other invalid filename characters
             
             console.log(`Final output path: ${outputFilePath}`);
             
@@ -379,6 +382,9 @@ export function renderTemplateFile(options: RenderFileOptions): string | string[
             }
           });
           
+          console.log('methodName value:', context['@methodName']);
+          console.log('After replacements, outputFilePath:', outputFilePath);
+          
           // Replace any remaining template variables with empty string
           outputFilePath = outputFilePath.replace(/{{[^}]+}}/g, '');
           
@@ -389,8 +395,8 @@ export function renderTemplateFile(options: RenderFileOptions): string | string[
           
           // Replace any invalid characters in the filepath
           outputFilePath = outputFilePath
-            .replace(/[\{\}]/g, '_') // Replace path parameter braces with underscores
-            .replace(/[<>:"\|?*]/g, '_'); // Replace other invalid filename characters
+            .replace(/[{}]/g, '_') // Replace path parameter braces with underscores
+            .replace(/[<>:"|?*]/g, '_'); // Replace other invalid filename characters
           
           console.log(`Final output path: ${outputFilePath}`);
           

@@ -8,8 +8,8 @@
  * @param template - The template to validate
  * @returns Whether the template is valid
  */
-export function validateTemplate(template: string): boolean {
-  // Implementation will go here
+export function validateTemplate(template: string): boolean { // eslint-disable-line @typescript-eslint/no-unused-vars
+  // TODO: Implement validation logic
   return true;
 }
 

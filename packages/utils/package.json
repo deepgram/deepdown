@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rimraf dist",
+    "lint": "eslint \"**/*.{js,ts,mjs}\"",
+    "dev": "tsc -w"
   },
   "keywords": [
     "deepgram",

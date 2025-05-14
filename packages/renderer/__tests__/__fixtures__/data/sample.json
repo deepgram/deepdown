@@ -1,0 +1,25 @@
+{
+  "spec": {
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "description": "A user in the system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        }
+      }
+    }
+  }
+}

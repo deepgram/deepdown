@@ -1,6 +1,5 @@
 import * as yaml from 'js-yaml';
 import * as fs from 'fs';
-import * as path from 'path';
 
 /**
  * Parses a YAML file and returns it as a JavaScript object

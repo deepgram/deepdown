@@ -1,5 +1,6 @@
 {
   "files.associations": {
     "*.deepdown": "handlebars"
-  }
+  },
+  "nxConsole.generateAiAgentRules": true
 }

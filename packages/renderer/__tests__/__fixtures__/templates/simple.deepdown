@@ -1,0 +1,14 @@
+<!-- packages/renderer/__tests__/__fixtures__/templates/simple.deepdown -->
+---
+outputPattern: {{@schemaName}}/index.md
+splitOn: components.schemas
+---
+# {{schemaName}}
+
+{{description}}
+
+## Properties
+
+{{#each properties}}
+- **{{@key}}**: {{type}}
+{{/each}}

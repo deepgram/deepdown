@@ -56,9 +56,9 @@ export async function resolveSchemaRefs(
  */
 export async function resolveOpenAPISecuritySchemes(
   schema: any,
-  options: SchemaRefResolverOptions = {}
+  options: SchemaRefResolverOptions = {} // eslint-disable-line @typescript-eslint/no-unused-vars
 ): Promise<any> {
-  // Placeholder for OpenAPI-specific security scheme resolution
+  // TODO: Placeholder for OpenAPI-specific security scheme resolution
   // Will be implemented in a dedicated @deepgram/deepdown-openapi package
   return schema;
 }
@@ -69,9 +69,9 @@ export async function resolveOpenAPISecuritySchemes(
  */
 export async function resolveAsyncAPISecuritySchemes(
   schema: any,
-  options: SchemaRefResolverOptions = {}
+  options: SchemaRefResolverOptions = {} // eslint-disable-line @typescript-eslint/no-unused-vars
 ): Promise<any> {
-  // Placeholder for AsyncAPI-specific security scheme resolution
+  // TODO: Placeholder for AsyncAPI-specific security scheme resolution
   // Will be implemented in a dedicated @deepgram/deepdown-asyncapi package
   return schema;
 }

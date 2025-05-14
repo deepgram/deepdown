@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renderer renderTemplate should render a simple template with provided data: simple-template 1`] = `
+"# Test Document
+
+This is a test document"
+`;
+
+exports[`Renderer renderTemplateFile should render a template file with schema data: template-file-output 1`] = `
+"<!-- packages/renderer/__tests__/__fixtures__/templates/simple.deepdown -->
+---
+outputPattern: /index.md
+splitOn: components.schemas
+---
+# 
+
+
+
+## Properties
+
+"
+`;

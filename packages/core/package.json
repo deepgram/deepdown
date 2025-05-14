@@ -8,8 +8,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist",
+    "lint": "eslint \"**/*.{js,ts,mjs}\"",
+    "dev": "tsc -w"
   },
   "dependencies": {
     "@deepgram/deepdown-utils": "workspace:^0.0.1"
