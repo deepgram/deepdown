@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-provider-pinecone",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Pinecone provider for Deepdown - uploads markdown to Pinecone vector store",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,4 +27,4 @@
   "dependencies": {
     "@pinecone-database/pinecone": "^1.1.2"
   }
-} 
+}

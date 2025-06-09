@@ -22,7 +22,7 @@
     "lint": "lerna run lint",
     "dev": "lerna run dev --parallel",
     "bootstrap": "pnpm install",
-    "publish": "lerna publish",
+    "publish": "lerna publish --message \"chore(release): publish\"",
     "commit": "git-cz"
   },
   "keywords": [

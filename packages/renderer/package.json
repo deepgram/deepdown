@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-renderer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Renderer for Deepdown - generates markdown from templates",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

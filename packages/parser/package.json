@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-parser",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parser for Deepdown - converts YAML/JSON to structured data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -30,4 +30,4 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9"
   }
-} 
+}

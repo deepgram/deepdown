@@ -1,0 +1,73 @@
+156 error Error: Command failed with exit code 1: git commit -F /private/var/folders/sq/tgy0q1pn4l90jpm5b8bhsj240000gn/T/e4557085-cd3e-46c8-886d-a59af06cbaea/lerna-commit.txt
+156 error
+156 error > @deepgram/deepdown-project@0.0.3 test
+156 error > lerna run test
+156 error
+156 error (node:65770) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+156 error (Use `node --trace-deprecation ...` to show where the warning was created)
+156 error lerna notice cli v8.2.2
+156 error lerna info versioning independent
+156 error
+156 error > @deepgram/deepdown-renderer:test
+156 error
+156 error > @deepgram/deepdown-renderer@0.1.0 test /Users/lukeoliff/Projects/deepgram/deepdown/packages/renderer
+156 error > jest
+156 error ts-jest[config] (WARN)
+156 error     The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /Users/lukeoliff/Projects/deepgram/deepdown/packages/renderer/tsconfig.test.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+156 error
+156 error   [2mconsole.log[22m
+156 error     No frontmatter found in template
+156 error [2m[22m
+156 error [2m      [2mat extractFrontmatter ([22m[2mpackages/renderer/src/index.ts[2m:84:13)[22m[2m[22m
+156 error [0m[7m[1m[32m PASS [39m[22m[27m[0m [0m[7m[37m renderer [39m[27m[0m [2m__tests__/[22m[1mindex.test.ts[22m
+156 error   Renderer
+156 error     renderTemplate
+156 error       [32m✓[39m [2mshould render a simple template with provided data (4 ms)[22m
+156 error     renderTemplateFile
+156 error       [32m✓[39m [2mshould render a template file with schema data (14 ms)[22m
+156 error [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+156 error [1mTests:       [22m[1m[32m2 passed[39m[22m, 2 total
+156 error [1mSnapshots:   [22m[1m[32m2 passed[39m[22m, 2 total
+156 error [1mTime:[22m        0.207 s, estimated 1 s
+156 error [2mRan all test suites[22m[2m.[22m
+156 error
+156 error
+156 error
+156 error  Lerna (powered by Nx)   Successfully ran target test for project @deepgram/deepdown-renderer
+156 error
+156 error
+156 error husky - DEPRECATED
+156 error
+156 error Please remove the following two lines from .husky/commit-msg:
+156 error
+156 error #!/usr/bin/env sh
+156 error . "$(dirname -- "$0")/_/husky.sh"
+156 error
+156 error They WILL FAIL in v10.0.0
+156 error
+156 error ⧗   input: Publish
+156 error
+156 error  - @deepgram/deepdown-asyncapi@0.1.0
+156 error  - @deepgram/deepdown-cli@0.1.0
+156 error  - @deepgram/deepdown-core@0.1.0
+156 error  - @deepgram/deepdown@0.2.0
+156 error  - @deepgram/deepdown-openapi@0.1.0
+156 error  - @deepgram/deepdown-parser@0.1.0
+156 error  - @deepgram/deepdown-provider-pinecone@0.1.0
+156 error  - @deepgram/deepdown-renderer@0.1.0
+156 error  - @deepgram/deepdown-resolver-asyncapi@0.1.0
+156 error  - @deepgram/deepdown-resolver-openapi@0.1.0
+156 error  - @deepgram/deepdown-utils@0.1.0
+156 error ✖   subject may not be empty [subject-empty]
+156 error ✖   type may not be empty [type-empty]
+156 error
+156 error ✖   found 2 problems, 0 warnings
+156 error ⓘ   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint
+156 error
+156 error husky - commit-msg script failed (code 1)
+156 error     at makeError (/Users/lukeoliff/Projects/deepgram/deepdown/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
+156 error     at handlePromise (/Users/lukeoliff/Projects/deepgram/deepdown/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:114:26)
+156 error     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+156 error     at async VersionCommand.gitCommitAndTagVersionForUpdates (/Users/lukeoliff/Projects/deepgram/deepdown/node_modules/.pnpm/lerna@8.2.2_babel-plugin-macros@3.1.0_encoding@0.1.13/node_modules/lerna/dist/index.js:9957:11)
+156 error     at async VersionCommand.commitAndTagUpdates (/Users/lukeoliff/Projects/deepgram/deepdown/node_modules/.pnpm/lerna@8.2.2_babel-plugin-macros@3.1.0_encoding@0.1.13/node_modules/lerna/dist/index.js:9938:18)
+156 error     at async Promise.all (index 0)
