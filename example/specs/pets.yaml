@@ -49,6 +49,7 @@ tags:
     description: Operations about user
 paths:
   /pet:
+    description: Everything about your Pets
     put:
       tags:
         - pet

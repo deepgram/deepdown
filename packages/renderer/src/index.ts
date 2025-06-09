@@ -241,8 +241,17 @@ export function renderTemplateFile(options: RenderFileOptions): string | string[
     
     if (groupBy === 'method' && typeof entryData === 'object' && entryData !== null) {
       console.log(`Entry ${entryName} is being processed by method`);
+      
+      // Define a list of valid HTTP methods
+      const validMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+      
       // Each HTTP method gets its own file
       Object.entries(entryData as Record<string, any>).forEach(([methodName, methodData]) => {
+        // Skip non-method entries
+        if (!validMethods.includes(methodName.toLowerCase())) {
+          return;
+        }
+        
         console.log(`Processing method: ${methodName}`);
         // Create a context for this specific method
         const context = {

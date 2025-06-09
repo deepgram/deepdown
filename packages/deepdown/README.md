@@ -54,6 +54,29 @@ deepdown build specs/api.yaml templates/api.deepdown --output docs/ --resolve-re
 deepdown build specs/api.yaml templates/api.deepdown --output docs/ --resolve-refs --resolve-security
 ```
 
+### Tab Completion
+
+Set up tab completion to make working with the CLI easier:
+
+```bash
+# Generate and install Bash completion
+deepdown completion > ~/.deepdown-completion.bash
+echo 'source ~/.deepdown-completion.bash' >> ~/.bashrc
+source ~/.bashrc
+
+# For ZSH users
+deepdown completion --shell zsh > ~/.deepdown-completion.zsh
+echo 'source ~/.deepdown-completion.zsh' >> ~/.zshrc
+source ~/.zshrc
+
+# For Fish shell
+deepdown completion --shell fish > ~/.config/fish/completions/deepdown.fish
+
+# For PowerShell
+deepdown completion --shell powershell > ~/.deepdown-completion.ps1
+echo '. ~/.deepdown-completion.ps1' >> $PROFILE
+```
+
 ### Programmatic Usage
 
 ```javascript
