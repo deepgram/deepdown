@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-resolver-openapi@0.2.1...@deepgram/deepdown-resolver-openapi@0.2.2) (2025-06-09)
+
+**Note:** Version bump only for package @deepgram/deepdown-resolver-openapi
+
 ## [0.2.1](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-resolver-openapi@0.2.0...@deepgram/deepdown-resolver-openapi@0.2.1) (2025-06-09)
 
 **Note:** Version bump only for package @deepgram/deepdown-resolver-openapi

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-renderer@0.2.1...@deepgram/deepdown-renderer@0.3.0) (2025-06-09)
+
+### Features
+
+- add new helpers ([0128b25](https://github.com/deepgram/deepdown/commit/0128b252242fe626a337250c503b48555688cf2f))
+
 ## [0.2.1](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-renderer@0.2.0...@deepgram/deepdown-renderer@0.2.1) (2025-06-09)
 
 ### Bug Fixes

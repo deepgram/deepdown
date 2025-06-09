@@ -71,13 +71,13 @@ importers:
         specifier: ^12.0.1
         version: 12.0.1
       "@deepgram/deepdown-renderer":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.3.0
         version: link:../renderer
 
   packages/cli:
     dependencies:
       "@deepgram/deepdown":
-        specifier: workspace:^0.3.1
+        specifier: workspace:^0.3.2
         version: link:../deepdown
       commander:
         specifier: ^11.1.0
@@ -101,13 +101,13 @@ importers:
         specifier: workspace:^0.2.0
         version: link:../parser
       "@deepgram/deepdown-renderer":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.3.0
         version: link:../renderer
       "@deepgram/deepdown-resolver-asyncapi":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.2.2
         version: link:../resolver-asyncapi
       "@deepgram/deepdown-resolver-openapi":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.2.2
         version: link:../resolver-openapi
 
   packages/openapi:
@@ -116,7 +116,7 @@ importers:
         specifier: ^12.0.1
         version: 12.0.1
       "@deepgram/deepdown-renderer":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.3.0
         version: link:../renderer
 
   packages/parser:
@@ -157,7 +157,7 @@ importers:
         specifier: ^12.0.1
         version: 12.0.1
       "@deepgram/deepdown-renderer":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.3.0
         version: link:../renderer
 
   packages/resolver-openapi:
@@ -166,7 +166,7 @@ importers:
         specifier: ^12.0.1
         version: 12.0.1
       "@deepgram/deepdown-renderer":
-        specifier: workspace:^0.2.1
+        specifier: workspace:^0.3.0
         version: link:../renderer
 
   packages/utils: {}
