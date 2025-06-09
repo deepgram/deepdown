@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,7 +13,7 @@
     "dev": "tsc -w"
   },
   "dependencies": {
-    "@deepgram/deepdown-utils": "workspace:^0.1.0"
+    "@deepgram/deepdown-utils": "workspace:^0.2.0"
   },
   "keywords": [
     "deepgram",
