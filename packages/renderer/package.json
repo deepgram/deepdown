@@ -4,6 +4,9 @@
   "description": "Renderer for Deepdown - generates markdown from templates",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
@@ -23,6 +26,9 @@
   ],
   "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^12.0.1",
     "handlebars": "^4.7.8",

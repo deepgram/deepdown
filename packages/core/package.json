@@ -23,5 +23,8 @@
   ],
   "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
   "license": "MIT",
-  "description": "Core functionality for Deepdown markdown templating"
+  "description": "Core functionality for Deepdown markdown templating",
+  "publishConfig": {
+    "access": "public"
+  }
 }

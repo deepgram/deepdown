@@ -4,6 +4,9 @@
   "description": "Command-line interface for Deepdown",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "deepdown": "./dist/cli.js"
   },
@@ -21,6 +24,9 @@
   ],
   "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@deepgram/deepdown": "workspace:^0.1.0",
     "commander": "^11.1.0",

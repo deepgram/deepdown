@@ -4,6 +4,9 @@
   "description": "Pinecone provider for Deepdown - uploads markdown to Pinecone vector store",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
@@ -18,6 +21,9 @@
   ],
   "author": "Luke Oliff <luke@deepgram.com> (https://deepgram.com)",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@pinecone-database/pinecone": "^1.1.2"
   }
