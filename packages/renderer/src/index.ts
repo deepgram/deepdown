@@ -63,6 +63,345 @@ Handlebars.registerHelper('basename', function(ref) {
   return parts[parts.length - 1];
 });
 
+
+interface FlattenedProperty {
+  path: string;
+  type: string;
+  required: boolean;
+  description: string;
+  format?: string;
+  example?: any;
+}
+
+Handlebars.registerHelper('flattenProperties', function(schema: any, options?: Handlebars.HelperOptions): FlattenedProperty[] | string {
+  /**
+   * Recursively flatten schema properties into a flat list
+   * Returns: [{path: 'metadata.request_id', type: 'string', required: true, description: '...'}]
+   */
+  
+  function flattenSchema(obj: any, basePath: string = '', parentRequired: string[] = []): FlattenedProperty[] {
+    const flattened: FlattenedProperty[] = [];
+    
+    if (!obj || !obj.properties) {
+      return flattened;
+    }
+    
+    Object.keys(obj.properties).forEach(key => {
+      const property = obj.properties[key];
+      const currentPath = basePath ? `${basePath}.${key}` : key;
+      const isRequired = parentRequired.includes(key);
+      
+      // Add current property
+      flattened.push({
+        path: currentPath,
+        type: property.type || 'object',
+        required: isRequired,
+        description: property.description || '',
+        format: property.format,
+        example: property.example
+      });
+      
+      // Handle nested objects
+      if (property.type === 'object' && property.properties) {
+        const nestedFlattened = flattenSchema(
+          property, 
+          currentPath, 
+          property.required || []
+        );
+        flattened.push(...nestedFlattened);
+      }
+      
+      // Handle arrays with object items
+      if (property.type === 'array' && property.items) {
+        const arrayPath = `${currentPath}[]`;
+        
+        if (property.items.type === 'object' && property.items.properties) {
+          // Add array indicator
+          flattened.push({
+            path: arrayPath,
+            type: `array[${property.items.type}]`,
+            required: isRequired,
+            description: `Array of ${property.items.type} items`,
+            format: property.format,
+            example: property.example
+          });
+          
+          // Flatten array item properties
+          const arrayItemFlattened = flattenSchema(
+            property.items, 
+            arrayPath, 
+            property.items.required || []
+          );
+          flattened.push(...arrayItemFlattened);
+        } else {
+          // Simple array
+          flattened.push({
+            path: arrayPath,
+            type: `array[${property.items.type || 'any'}]`,
+            required: isRequired,
+            description: property.description || `Array of ${property.items.type || 'any'} values`,
+            format: property.format,
+            example: property.example
+          });
+        }
+      }
+    });
+    
+    return flattened;
+  }
+  
+  const flattened = flattenSchema(schema, '', schema.required || []);
+  
+  // Return formatted table rows if in table context
+  if (options && options.fn) {
+    return flattened.map(prop => options.fn(prop)).join('');
+  }
+  
+  return flattened;
+});
+
+Handlebars.registerHelper('generateExample', function(schema: any, options?: Handlebars.HelperOptions): string {
+  /**
+   * Recursively generate realistic example JSON from schema
+   * Handles nested objects, arrays, and all data types
+   */
+  
+  function generateValue(property: any, propertyName: string = ''): any {
+    // Use existing example if available
+    if (property.example !== undefined) {
+      return property.example;
+    }
+    
+    // Generate based on type
+    switch (property.type) {
+      case 'string':
+        if (property.format === 'uuid') {
+          return `${propertyName}_uuid_example`;
+        }
+        if (property.format === 'date-time') {
+          return new Date().toISOString();
+        }
+        if (property.format === 'uri') {
+          return `https://example.com/${propertyName}`;
+        }
+        return `example_${propertyName || 'string'}`;
+        
+      case 'number':
+      case 'integer':
+        if (propertyName.includes('confidence') || propertyName.includes('score')) {
+          return 0.95;
+        }
+        if (propertyName.includes('time') || propertyName.includes('duration')) {
+          return 25.5;
+        }
+        if (propertyName.includes('count') || propertyName.includes('num')) {
+          return 5;
+        }
+        return 42;
+        
+      case 'boolean':
+        return true;
+        
+      case 'array':
+        if (property.items) {
+          const itemExample: any = generateValue(property.items, propertyName);
+          return [itemExample];
+        }
+        return [];
+        
+      case 'object':
+        if (property.properties) {
+          return generateObjectFromSchema(property);
+        }
+        return {};
+        
+      default:
+        return null;
+    }
+  }
+  
+  function generateObjectFromSchema(schema: any, requiredOnly: boolean = false): Record<string, any> {
+    const result: Record<string, any> = {};
+    
+    if (!schema.properties) {
+      return result;
+    }
+    
+    const requiredFields = schema.required || [];
+    const propsToProcess = requiredOnly 
+      ? Object.keys(schema.properties).filter(key => requiredFields.includes(key))
+      : Object.keys(schema.properties);
+    
+    propsToProcess.forEach(key => {
+      const property = schema.properties[key];
+      result[key] = generateValue(property, key);
+    });
+    
+    return result;
+  }
+  
+  // Check if we should only generate required properties
+  const requiredOnly = options && options.hash && options.hash.requiredOnly;
+  
+  const example = generateObjectFromSchema(schema, requiredOnly);
+  
+  // Return as formatted JSON string
+  return JSON.stringify(example, null, 2);
+});
+
+Handlebars.registerHelper('buildPropertyPath', function(basePath: string, propertyName: string, isArray: boolean): string {
+  /**
+   * Build dot notation and array notation paths safely
+   * Handles: metadata.model_info[model_id].name, results.channels[].alternatives[]
+   */
+  
+  if (!basePath && !propertyName) {
+    return '';
+  }
+  
+  if (!basePath) {
+    return isArray ? `${propertyName}[]` : propertyName;
+  }
+  
+  if (!propertyName) {
+    return basePath;
+  }
+  
+  // Handle array notation
+  if (isArray) {
+    return `${basePath}.${propertyName}[]`;
+  }
+  
+  // Handle special characters in property names
+  const safeName = propertyName.includes('.') || propertyName.includes(' ') 
+    ? `["${propertyName}"]` 
+    : propertyName;
+    
+  return `${basePath}.${safeName}`;
+});
+
+Handlebars.registerHelper('getPropertyType', function(property: any): string {
+  /**
+   * Get a human-readable type description for a property
+   */
+  
+  if (!property) return 'unknown';
+  
+  let typeDesc = property.type || 'object';
+  
+  if (property.format) {
+    typeDesc += ` (${property.format})`;
+  }
+  
+  if (property.type === 'array' && property.items) {
+    if (property.items.type) {
+      typeDesc = `array[${property.items.type}]`;
+    } else {
+      typeDesc = 'array[object]';
+    }
+  }
+  
+  return typeDesc;
+});
+
+Handlebars.registerHelper('isRequired', function(propertyName: string, requiredArray: string[]): boolean {
+  /**
+   * Check if a property is required
+   */
+  
+  if (!requiredArray || !Array.isArray(requiredArray)) {
+    return false;
+  }
+  
+  return requiredArray.includes(propertyName);
+});
+
+Handlebars.registerHelper('flattenPropertiesTable', function(schema: any): Handlebars.SafeString {
+  /**
+   * Generate a complete flattened properties table for markdown
+   */
+  
+  // Since we can't directly access the registered helper, we'll recreate the flattening logic
+  function flattenSchema(obj: any, basePath: string = '', parentRequired: string[] = []): FlattenedProperty[] {
+    const flattened: FlattenedProperty[] = [];
+    
+    if (!obj || !obj.properties) {
+      return flattened;
+    }
+    
+    Object.keys(obj.properties).forEach(key => {
+      const property = obj.properties[key];
+      const currentPath = basePath ? `${basePath}.${key}` : key;
+      const isRequired = parentRequired.includes(key);
+      
+      flattened.push({
+        path: currentPath,
+        type: property.type || 'object',
+        required: isRequired,
+        description: property.description || '',
+        format: property.format,
+        example: property.example
+      });
+      
+      // Handle nested objects
+      if (property.type === 'object' && property.properties) {
+        const nestedFlattened = flattenSchema(
+          property, 
+          currentPath, 
+          property.required || []
+        );
+        flattened.push(...nestedFlattened);
+      }
+      
+      // Handle arrays with object items
+      if (property.type === 'array' && property.items) {
+        const arrayPath = `${currentPath}[]`;
+        
+        if (property.items.type === 'object' && property.items.properties) {
+          flattened.push({
+            path: arrayPath,
+            type: `array[${property.items.type}]`,
+            required: isRequired,
+            description: `Array of ${property.items.type} items`,
+            format: property.format,
+            example: property.example
+          });
+          
+          const arrayItemFlattened = flattenSchema(
+            property.items, 
+            arrayPath, 
+            property.items.required || []
+          );
+          flattened.push(...arrayItemFlattened);
+        } else {
+          flattened.push({
+            path: arrayPath,
+            type: `array[${property.items.type || 'any'}]`,
+            required: isRequired,
+            description: property.description || `Array of ${property.items.type || 'any'} values`,
+            format: property.format,
+            example: property.example
+          });
+        }
+      }
+    });
+    
+    return flattened;
+  }
+  
+  const flattened = flattenSchema(schema, '', schema.required || []);
+  
+  let tableRows = '';
+  flattened.forEach((prop: FlattenedProperty) => {
+    const required = prop.required ? 'Yes' : 'No';
+    const description = prop.description || `${prop.type} property`;
+    
+    tableRows += `| \`${prop.path}\` | ${prop.type} | ${required} | ${description} |\n`;
+  });
+  
+  return new Handlebars.SafeString(tableRows);
+});
+
 /**
  * Interface for template frontmatter
  */
