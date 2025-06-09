@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown@0.3.0...@deepgram/deepdown@0.3.1) (2025-06-09)
+
+### Bug Fixes
+
+- dont treat path metadata as methods ([6e987df](https://github.com/deepgram/deepdown/commit/6e987df28013395091a426c9e5824ef4473f200c))
+
 # 0.3.0 (2025-06-09)
 
 ### Bug Fixes

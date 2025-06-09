@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-asyncapi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "AsyncAPI-specific functionality for Deepdown markdown templating",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^12.0.1",
-    "@deepgram/deepdown-renderer": "workspace:^0.2.0"
+    "@deepgram/deepdown-renderer": "workspace:^0.2.1"
   },
   "publishConfig": {
     "access": "public"
