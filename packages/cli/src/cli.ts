@@ -70,7 +70,7 @@ _deepdown_completion() {
   prev="\${COMP_WORDS[COMP_CWORD-1]}"
   
   # All available commands
-  opts="build parse render completion"
+  opts="build parse render completion helpers"
   
   # Complete commands
   if [[ \${COMP_CWORD} -eq 1 ]]; then
@@ -112,6 +112,13 @@ _deepdown_completion() {
         COMPREPLY=( $(compgen -W "-s --shell" -- \${cur}) )
       fi
       ;;
+    helpers)
+      if [[ \${prev} == "-f" || \${prev} == "--format" ]]; then
+        COMPREPLY=( $(compgen -W "table json markdown" -- \${cur}) )
+      elif [[ \${cur} == -* ]]; then
+        COMPREPLY=( $(compgen -W "-f --format" -- \${cur}) )
+      fi
+      ;;
   esac
   
   return 0
@@ -131,6 +138,7 @@ _deepdown() {
     'parse:Parse YAML/JSON spec files'
     'render:Render markdown from templates and data'
     'completion:Generate shell completion script'
+    'helpers:List all available Handlebars helpers'
   )
   
   if (( CURRENT == 2 )); then
@@ -185,6 +193,13 @@ _deepdown() {
       )
       _arguments -s $options
       ;;
+    helpers)
+      options=(
+        '-f:Output format:(table json markdown)'
+        '--format:Output format:(table json markdown)'
+      )
+      _arguments -s $options
+      ;;
   esac
 }
 
@@ -194,7 +209,7 @@ compdef _deepdown deepdown
       script = `
 # Fish completion script for deepdown CLI
 function __fish_deepdown_no_subcommand
-    not __fish_seen_subcommand_from build parse render completion
+    not __fish_seen_subcommand_from build parse render completion helpers
 end
 
 # Main commands
@@ -202,6 +217,7 @@ complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a build -d 'Parse sp
 complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a parse -d 'Parse YAML/JSON spec files'
 complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a render -d 'Render markdown from templates and data'
 complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a completion -d 'Generate shell completion script'
+complete -c deepdown -f -n '__fish_deepdown_no_subcommand' -a helpers -d 'List all available Handlebars helpers'
 
 # build command options
 complete -c deepdown -f -n '__fish_seen_subcommand_from build' -s o -l output -d 'Output directory for rendered markdown' -a '(__fish_complete_directories)'
@@ -227,6 +243,9 @@ complete -c deepdown -f -n '__fish_seen_subcommand_from render' -l spec-type -d 
 
 # completion command options
 complete -c deepdown -f -n '__fish_seen_subcommand_from completion' -s s -l shell -d 'Shell type' -a 'bash zsh fish powershell'
+
+# helpers command options
+complete -c deepdown -f -n '__fish_seen_subcommand_from helpers' -s f -l format -d 'Output format' -a 'table json markdown'
 `;
     } else if (shell === 'powershell') {
       script = `
@@ -234,7 +253,7 @@ complete -c deepdown -f -n '__fish_seen_subcommand_from completion' -s s -l shel
 Register-ArgumentCompleter -Native -CommandName deepdown -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
     
-    $commands = @('build', 'parse', 'render', 'completion')
+    $commands = @('build', 'parse', 'render', 'completion', 'helpers')
     $commandArgs = @{
         'build' = @{
             '-o' = $null
@@ -269,6 +288,10 @@ Register-ArgumentCompleter -Native -CommandName deepdown -ScriptBlock {
         'completion' = @{
             '-s' = @('bash', 'zsh', 'fish', 'powershell')
             '--shell' = @('bash', 'zsh', 'fish', 'powershell')
+        }
+        'helpers' = @{
+            '-f' = @('table', 'json', 'markdown')
+            '--format' = @('table', 'json', 'markdown')
         }
     }
     
@@ -552,6 +575,132 @@ program
     } catch (error) {
       console.error(`Error rendering templates: ${error}`);
       process.exit(1);
+    }
+  });
+
+program
+  .command('helpers')
+  .description('List all available Handlebars helpers with descriptions and usage examples')
+  .option('-f, --format <type>', 'Output format: table, json, or markdown', 'table')
+  .action((options) => {
+    const helpers = [
+      {
+        name: 'json',
+        description: 'Convert a JavaScript object to JSON string with pretty formatting',
+        usage: '{{json data}}'
+      },
+      {
+        name: 'includes',
+        description: 'Check if an array includes a specific value',
+        usage: '{{#if (includes array "value")}}...{{/if}}'
+      },
+      {
+        name: 'ne',
+        description: 'Check if two values are not equal',
+        usage: '{{#if (ne a b)}}...{{/if}}'
+      },
+      {
+        name: 'eq',
+        description: 'Check if two values are equal',
+        usage: '{{#if (eq a b)}}...{{/if}}'
+      },
+      {
+        name: 'gt',
+        description: 'Check if first value is greater than second',
+        usage: '{{#if (gt a b)}}...{{/if}}'
+      },
+      {
+        name: 'lt',
+        description: 'Check if first value is less than second',
+        usage: '{{#if (lt a b)}}...{{/if}}'
+      },
+      {
+        name: 'lookup',
+        description: 'Dynamically look up a property in an object',
+        usage: '{{lookup object "propertyName"}}'
+      },
+      {
+        name: 'uppercase',
+        description: 'Convert a string to uppercase',
+        usage: '{{uppercase "text"}}'
+      },
+      {
+        name: 'lowercase',
+        description: 'Convert a string to lowercase',
+        usage: '{{lowercase "TEXT"}}'
+      },
+      {
+        name: 'capitalize',
+        description: 'Capitalize the first letter of a string',
+        usage: '{{capitalize "text"}}'
+      },
+      {
+        name: 'basename',
+        description: 'Extract the last segment from a schema reference path',
+        usage: '{{basename "#/components/schemas/Pet"}}'
+      },
+      {
+        name: 'flattenProperties',
+        description: 'Recursively flatten JSON Schema properties into a flat list with dot notation paths',
+        usage: '{{#each (flattenProperties schema)}}{{path}} - {{type}}{{/each}}'
+      },
+      {
+        name: 'generateExample',
+        description: 'Generate realistic example JSON from a JSON Schema',
+        usage: '{{generateExample schema}} or {{generateExample schema requiredOnly=true}}'
+      },
+      {
+        name: 'buildPropertyPath',
+        description: 'Build dot notation and array notation paths safely for nested properties',
+        usage: '{{buildPropertyPath "metadata" "request_id" false}}'
+      },
+      {
+        name: 'getPropertyType',
+        description: 'Get a human-readable type description for a schema property',
+        usage: '{{getPropertyType property}}'
+      },
+      {
+        name: 'isRequired',
+        description: 'Check if a property is required in a schema',
+        usage: '{{#if (isRequired "propertyName" schema.required)}}Required{{/if}}'
+      },
+      {
+        name: 'flattenPropertiesTable',
+        description: 'Generate a complete flattened properties table in markdown format',
+        usage: '| Property | Type | Required | Description |\\n|----------|------|----------|-------------|\\n{{flattenPropertiesTable schema}}'
+      }
+    ];
+
+    if (options.format === 'json') {
+      console.log(JSON.stringify(helpers, null, 2));
+    } else if (options.format === 'markdown') {
+      console.log('# Deepdown Handlebars Helpers\n');
+      console.log('The following helpers are available in your Deepdown templates:\n');
+      
+      helpers.forEach(helper => {
+        console.log(`## \`${helper.name}\`\n`);
+        console.log(`${helper.description}\n`);
+        console.log('**Usage:**');
+        console.log('```handlebars');
+        console.log(helper.usage);
+        console.log('```\n');
+      });
+    } else {
+      // Default table format
+      console.log('\x1b[32m%s\x1b[0m', '📚 Available Handlebars Helpers');
+      console.log('\x1b[36m%s\x1b[0m', 'Use these helpers in your .deepdown templates:\n');
+      
+      const maxNameLength = Math.max(...helpers.map(h => h.name.length));
+      const maxUsageLength = Math.max(...helpers.map(h => h.usage.length));
+      
+      console.log(`${'Helper'.padEnd(maxNameLength)} | ${'Usage'.padEnd(maxUsageLength)} | Description`);
+      console.log(`${'-'.repeat(maxNameLength)}-|-${'-'.repeat(maxUsageLength)}-|-${'-'.repeat(30)}`);
+      
+      helpers.forEach(helper => {
+        console.log(`${helper.name.padEnd(maxNameLength)} | ${helper.usage.padEnd(maxUsageLength)} | ${helper.description}`);
+      });
+      
+      console.log('\n\x1b[33m%s\x1b[0m', 'Tip: Use --format markdown to get detailed documentation, or --format json for machine-readable output.');
     }
   });
 

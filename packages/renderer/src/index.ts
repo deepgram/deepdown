@@ -876,11 +876,106 @@ export async function renderMultipleTemplateFilesWithResolvedRefs(
   });
 }
 
+/**
+ * Get information about all available Handlebars helpers
+ * @returns Array of helper information objects
+ */
+export function getHelperInfo(): Array<{ name: string; description: string; usage?: string }> {
+  return [
+    {
+      name: 'json',
+      description: 'Convert a JavaScript object to JSON string with pretty formatting',
+      usage: '{{json data}}'
+    },
+    {
+      name: 'includes',
+      description: 'Check if an array includes a specific value',
+      usage: '{{#if (includes array "value")}}...{{/if}}'
+    },
+    {
+      name: 'ne',
+      description: 'Check if two values are not equal',
+      usage: '{{#if (ne a b)}}...{{/if}}'
+    },
+    {
+      name: 'eq',
+      description: 'Check if two values are equal',
+      usage: '{{#if (eq a b)}}...{{/if}}'
+    },
+    {
+      name: 'gt',
+      description: 'Check if first value is greater than second',
+      usage: '{{#if (gt a b)}}...{{/if}}'
+    },
+    {
+      name: 'lt',
+      description: 'Check if first value is less than second',
+      usage: '{{#if (lt a b)}}...{{/if}}'
+    },
+    {
+      name: 'lookup',
+      description: 'Dynamically look up a property in an object',
+      usage: '{{lookup object "propertyName"}}'
+    },
+    {
+      name: 'uppercase',
+      description: 'Convert a string to uppercase',
+      usage: '{{uppercase "text"}}'
+    },
+    {
+      name: 'lowercase',
+      description: 'Convert a string to lowercase',
+      usage: '{{lowercase "TEXT"}}'
+    },
+    {
+      name: 'capitalize',
+      description: 'Capitalize the first letter of a string',
+      usage: '{{capitalize "text"}}'
+    },
+    {
+      name: 'basename',
+      description: 'Extract the last segment from a schema reference path',
+      usage: '{{basename "#/components/schemas/Pet"}}'
+    },
+    {
+      name: 'flattenProperties',
+      description: 'Recursively flatten JSON Schema properties into a flat list with dot notation paths',
+      usage: '{{#each (flattenProperties schema)}}{{path}} - {{type}}{{/each}}'
+    },
+    {
+      name: 'generateExample',
+      description: 'Generate realistic example JSON from a JSON Schema',
+      usage: '{{generateExample schema}} or {{generateExample schema requiredOnly=true}}'
+    },
+    {
+      name: 'buildPropertyPath',
+      description: 'Build dot notation and array notation paths safely for nested properties',
+      usage: '{{buildPropertyPath "metadata" "request_id" false}}'
+    },
+    {
+      name: 'getPropertyType',
+      description: 'Get a human-readable type description for a schema property',
+      usage: '{{getPropertyType property}}'
+    },
+    {
+      name: 'isRequired',
+      description: 'Check if a property is required in a schema',
+      usage: '{{#if (isRequired "propertyName" schema.required)}}Required{{/if}}'
+    },
+    {
+      name: 'flattenPropertiesTable',
+      description: 'Generate a complete flattened properties table in markdown format',
+      usage: '| Property | Type | Required | Description |\n|----------|------|----------|-------------|\n{{flattenPropertiesTable schema}}'
+    }
+  ];
+}
+
 export default {
   renderTemplate,
   renderTemplateFile,
   renderTemplateFileWithResolvedRefs,
   renderMultipleTemplates,
   renderMultipleTemplateFiles,
-  renderMultipleTemplateFilesWithResolvedRefs
+  renderMultipleTemplateFilesWithResolvedRefs,
+  getHelperInfo
 }; 
