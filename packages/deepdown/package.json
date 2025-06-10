@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A markdown templating format for generating AI-ready documentation from JSON Schema, OpenAPI, and AsyncAPI specifications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,9 +26,9 @@
   "dependencies": {
     "@deepgram/deepdown-core": "workspace:^0.2.0",
     "@deepgram/deepdown-parser": "workspace:^0.2.0",
-    "@deepgram/deepdown-renderer": "workspace:^0.4.0",
-    "@deepgram/deepdown-resolver-asyncapi": "workspace:^0.2.3",
-    "@deepgram/deepdown-resolver-openapi": "workspace:^0.2.3"
+    "@deepgram/deepdown-renderer": "workspace:^0.5.0",
+    "@deepgram/deepdown-resolver-asyncapi": "workspace:^0.2.4",
+    "@deepgram/deepdown-resolver-openapi": "workspace:^0.2.4"
   },
   "publishConfig": {
     "access": "public"

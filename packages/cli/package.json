@@ -1,6 +1,6 @@
 {
   "name": "@deepgram/deepdown-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Command-line interface for Deepdown",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,7 +28,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@deepgram/deepdown": "workspace:^0.4.0",
+    "@deepgram/deepdown": "workspace:^0.4.1",
     "commander": "^11.1.0",
     "glob": "^10.3.10"
   }

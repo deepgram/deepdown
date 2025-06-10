@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-renderer@0.4.0...@deepgram/deepdown-renderer@0.5.0) (2025-06-10)
+
+### Features
+
+- add new 'and' helper to use as a handlebars operator ([91789ad](https://github.com/deepgram/deepdown/commit/91789ad083a55478c152578bb9b6094fef8922b9))
+
 # [0.4.0](https://github.com/deepgram/deepdown/compare/@deepgram/deepdown-renderer@0.3.0...@deepgram/deepdown-renderer@0.4.0) (2025-06-09)
 
 ### Features
