@@ -917,6 +917,11 @@ export function getHelperInfo(): Array<{ name: string; description: string; usag
       usage: '{{#if (lt a b)}}...{{/if}}'
     },
     {
+      name: 'and',
+      description: 'Logical AND operation between two values',
+      usage: '{{#if (and a b)}}...{{/if}}'
+    },
+    {
       name: 'lookup',
       description: 'Dynamically look up a property in an object',
       usage: '{{lookup object "propertyName"}}'
