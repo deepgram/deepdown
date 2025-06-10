@@ -31,6 +31,10 @@ Handlebars.registerHelper('lt', function(a, b) {
   return a < b;
 });
 
+Handlebars.registerHelper('and', function(a, b) {
+  return a && b;
+});
+
 Handlebars.registerHelper('lookup', function(obj, prop) {
   if (obj && typeof obj === 'object') {
     return obj[prop];
